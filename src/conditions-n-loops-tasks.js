@@ -378,23 +378,22 @@ function getBalanceIndex(arr) {
  */
 function getSpiralMatrix(size) {
   const spiral = [];
-    let [x, y, step] = [0, 0, size - 1];
+  let [x, y, step] = [0, 0, size - 1];
 
-    for (let i = 0; i < size; i += 1) spiral[i] = [];
+  for (let i = 0; i < size; i += 1) spiral[i] = [];
 
-    for (let i = 1; i <= size ** 2; i += 1) {
-      spiral[y][x] = i;
+  for (let i = 1; i <= size ** 2; i += 1) {
+    spiral[y][x] = i;
 
-      if (x === size - step - 1 && y === step) step -= 1;
+    if (x === size - step - 1 && y === step) step -= 1;
 
-      if ((x >= y && x < step) || (y === size - step - 1 && x === y - 1))
-        x += 1;
-      else if (y <= x && y < step) y += 1;
-      else if (x <= y && x >= size - step) x -= 1;
-      else if (y >= x && y >= size - step) y -= 1;
-    }
+    if ((x >= y && x < step) || (y === size - step - 1 && x === y - 1)) x += 1;
+    else if (y <= x && y < step) y += 1;
+    else if (x <= y && x >= size - step) x -= 1;
+    else if (y >= x && y >= size - step) y -= 1;
+  }
 
-    return spiral;
+  return spiral;
 }
 
 /**
@@ -412,8 +411,15 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const startSpiral = JSON.parse(JSON.stringify(matrix));
+  const endSpiral = matrix;
+
+  for (let i = 0; i < matrix.length; i += 1) {
+    for (let j = matrix.length - 1, k = 0; j >= 0; j -= 1, k += 1) {
+      endSpiral[i][k] = startSpiral[j][i];
+    }
+  }
 }
 
 /**
@@ -430,8 +436,24 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(array) {
+  if (array.length < 2) return array;
+  const result = array;
+  const pivot = array[0];
+  const left = [];
+  const right = [];
+  for (let i = 1; i < array.length; i += 1) {
+    if (array[i] < pivot) {
+      left[left.length] = array[i];
+    } else {
+      right[right.length] = array[i];
+    }
+  }
+  const rec = [...sortByAsc(left), pivot, ...sortByAsc(right)];
+  for (let i = 0; i < rec.length; i += 1) {
+    result[i] = rec[i];
+  }
+  return result;
 }
 
 /**
